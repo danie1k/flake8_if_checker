@@ -1,0 +1,190 @@
+# 001 ------------------------------------------------------------------------
+if request_filter.get("year"):
+    for invoice_data in quickbook.get_invoice(credentials, year=request_filter.get("year")):
+        for invoice in Serializer.parse(invoice_data):
+            if invoice:
+                data.append(invoice)
+elif request_filter.get("last") and True:
+    invoice_ids = []
+    for invoice_data in api.get_invoice(credentials, last_n=request_filter.get("last")):
+        for invoice in Serializer.parse(invoice_data):
+            if invoice and invoice.get("id") not in invoice_ids:
+                data.append(invoice)
+                invoice_ids.append(invoice.get("id"))
+    for invoice_data in api.get_invoice(credentials, last_n_modify=request_filter.get("last")):
+        for invoice in Serializer.parse(invoice_data):
+            if invoice and invoice.get("id") not in invoice_ids:
+                data.append(invoice)
+                invoice_ids.append(invoice.get("id"))
+elif request_filter.get('date_from') and request_filter.get('date_to'):
+    for invoice_data in api.get_invoice(credentials, date_from=request_filter.get("date_from"), date_to=request_filter.get("date_to")):
+        for invoice in Serializer.parse(invoice_data):
+            if invoice:
+                data.append(invoice)
+else:
+    for invoice_data in api.get_invoice(credentials):
+        for invoice in Serializer.parse(invoice_data):
+            if invoice:
+                data.append(invoice)
+
+
+# 002 ------------------------------------------------------------------------
+if left == right:
+    return True
+else:
+    return False
+
+
+# 003 ------------------------------------------------------------------------
+if left == right:
+    return True
+elif left > right:
+    return False
+
+# 004 ------------------------------------------------------------------------
+if left == right:
+    return True
+elif left > right:
+    return False
+else:
+    return None
+
+
+# 005 ------------------------------------------------------------------------
+if left_1 == right_1 and left_2 == right_2:
+    return True
+
+
+# 006 ------------------------------------------------------------------------
+if left_1 == right_1 and left_2 == right_2:
+    return True
+elif left_1 != right_1 or left_2 != right_2:
+    return False
+
+
+# 007 ------------------------------------------------------------------------
+if (left_1 == right_1 and left_2 == right_2):
+    return True
+
+
+# 008 ------------------------------------------------------------------------
+if left_1 == right_1 and \
+        left_2 == right_2:
+    return True
+
+
+# 009 ------------------------------------------------------------------------
+if \
+        left_1 == right_1 or \
+                left_2 == right_2:
+
+
+    return True
+
+
+# 010 ------------------------------------------------------------------------
+if (
+        left_1 == right_1 and left_2 == right_2
+):
+    return True
+
+
+# 011 ------------------------------------------------------------------------
+program_type = types[program] if cc_client.date_started else None
+
+
+# 012 ------------------------------------------------------------------------
+if left \
+        or left == right \
+        and left == right or \
+        left == right or (
+        left != right and left != right):
+    return True
+
+
+# 013 ------------------------------------------------------------------------
+if left == right \
+        or left == right \
+        and left == right or \
+        left == right or (left != right and left != right if True else left):
+    return True
+elif left != right and (
+        left == right or left != right
+):
+    return False
+
+
+# 014 ------------------------------------------------------------------------
+if left == right or left[0:] != right:
+    return True
+
+# 015 ------------------------------------------------------------------------
+if (
+        left == right or
+        len(left[0:]) > 0
+):
+    return True
+
+
+# 016 ------------------------------------------------------------------------
+if a or b or len(d) or a < b:
+    pass
+
+
+# 017 ------------------------------------------------------------------------
+if left == {'foo': 1, 'bar': False} or left[ : : 1] == left[:0]:
+    return True
+
+
+# 018 ------------------------------------------------------------------------
+if (True if x or y else False) or \
+        True or \
+        False:
+    pass
+
+# 019 ------------------------------------------------------------------------
+if True:
+    if False:
+        if left is None:
+            return 1
+    else:
+        if True:
+            pass
+        elif left is False:
+            if right:
+                pass
+            else:
+                if False:
+                    return 1
+        else:
+            return 2
+
+
+# 020 ------------------------------------------------------------------------
+if (True if (True if x else False) else False) or \
+        len(a[2:]) == 7 or \
+        True or \
+        False:
+    pass
+
+
+def really_creepy__nested_if_statement__3(left, right):
+    """
+    301:5=X001 4
+    301:5=X002 1
+    """
+    if (
+            (True if x else False) or
+            len(
+                a
+                [
+                2
+                :
+                ]
+            ) == 7 or
+            True or
+            False
+    ):
+        pass
+
+
