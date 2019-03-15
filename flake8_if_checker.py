@@ -1,4 +1,4 @@
-__version__ = '0.1'
+__version__ = '0.2'
 
 import ast
 import attr
@@ -107,7 +107,6 @@ class IfChecker:
     tree = attr.ib()
     lines = attr.ib()
     options = attr.ib()
-    visitor = attr.ib(default=AstVisitor())
 
     ELIF_LEN = len('elif ')
 
@@ -123,9 +122,11 @@ class IfChecker:
 
     def run(self):
         tree = ast.fix_missing_locations(self.tree)
-        self.visitor.lookup(tree)
 
-        for result in self.visitor.results:
+        visitor = AstVisitor()
+        visitor.lookup(tree)
+
+        for result in visitor.results:
             fixed_result = self._fix_result_item(result)
             if self._has_if01_error(fixed_result):
                 yield self._format_report(IfCheckerErrors.IF01, fixed_result)
