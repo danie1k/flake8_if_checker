@@ -3,6 +3,7 @@ os: linux
 python:
   - "2.7"
   - "3.5"
+  - "3.6"
   - "3.7"
   - "3.8"
   - "3.9"
@@ -13,7 +14,7 @@ cache:
 install:
   - pip install -e .[tests]
 
-script: coverage run -m pytest
+script: coverage run -m pytest -v
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
