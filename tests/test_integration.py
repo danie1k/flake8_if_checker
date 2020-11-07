@@ -3,17 +3,20 @@ import runpy
 import sys
 import textwrap
 
+from _pytest.capture import CaptureFixture  # pylint:disable=unused-import
+
 try:
     from unittest import mock
 except ImportError:
-    import mock
+    import mock  # type:ignore
 
 import pytest
 
 CWD = os.path.dirname(os.path.realpath(__file__))
 
 
-def test_flake8_integration(fixture_file, max_if_conditions, capsys):
+def test_flake8_integration(fixture_file, max_if_conditions, capsys):  # type:ignore
+    # type: (str, int, CaptureFixture) -> None
     given_flake8_arguments = [
         "flake8",
         "--select=IF0",

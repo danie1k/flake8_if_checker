@@ -3,7 +3,7 @@ import os
 
 import pytest
 
-from flake8_if_checker import IfChecker, IfCheckerErrors
+import flake8_if_checker
 
 try:
     from typing import Tuple
@@ -13,18 +13,21 @@ except ImportError:
 
 @pytest.fixture
 def report_getter(fixture_file, max_if_conditions):
+    # type: (str, int) -> Tuple[flake8_if_checker.IfCheckerReportItem]
     with open(fixture_file, "r") as fobj:
         tree = ast.parse(fobj.read(), os.path.basename(fixture_file))
         fobj.seek(0)
         lines = fobj.readlines()
 
-    checker = IfChecker(
+    checker = flake8_if_checker.IfChecker(
         tree=tree,
         lines=lines,
-        options=type("Options", (object,), {"max_if_conditions": max_if_conditions}),
+        options=type(  # type:ignore
+            "Options", (object,), {"max_if_conditions": max_if_conditions}
+        ),
     )
 
-    return tuple(checker.run())
+    return tuple(checker.run())  # type:ignore
 
 
 EXPECTED_REPORTS = [
@@ -93,14 +96,18 @@ EXPECTED_REPORTS = [
 ]
 
 
-@pytest.mark.parametrize("index,line,col,condition_count,type,kind", EXPECTED_REPORTS)
-def test_if01_error(report_getter, index, line, col, condition_count, type, kind):
+@pytest.mark.parametrize(  # type:ignore
+    "index,line,col,condition_count,type,kind", EXPECTED_REPORTS
+)  # pylint:disable=too-many-arguments
+def test_if01_error(
+    report_getter, index, line, col, condition_count, type, kind
+):  # pylint:disable=redefined-outer-name,redefined-builtin
     # type: (Tuple[tuple, ...], int, int, int, int, str, str) -> None
     report_result = report_getter[index][:-1]
     expected_result = (
         line,
         col,
-        IfCheckerErrors.IF01.value.format(
+        flake8_if_checker.IfCheckerErrors.IF01.value.format(
             line=line,
             col=col,
             type=type,
