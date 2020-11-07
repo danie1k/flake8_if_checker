@@ -11,7 +11,8 @@
 
 1. [About the Project](#about-the-project)
 1. [Installation](#installation)
-1. [Configuration](#usage)
+1. [Configuration](#configuration)
+1. [Known issues](#known-issues)
 1. [License](#license)
 
 
@@ -32,6 +33,13 @@ pip install flake8-if-checker
 
 If using the select [option from flake8](http://flake8.pycqa.org/en/latest/user/options.html#cmdoption-flake8-select)
 be sure to enable the `IF` category as well.
+
+
+## Known issues
+
+- Unknown if supports `# noqa`
+- Unknown if Flake8 v2
+- Does not work in Python 3.9
 
 
 ## License
