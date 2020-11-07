@@ -3,11 +3,14 @@ import collections
 import enum
 
 try:
+    # pylint:disable=unused-import
     from argparse import Namespace
     from flake8.options.manager import OptionManager
     from typing import Dict, Iterator, List, Tuple
 
-    IfCheckerReportItem = Tuple[int, int, str, type]
+    # pylint:enable=unused-import
+
+    IfCheckerReportItem = Tuple[int, int, str, type]  # pylint:disable=invalid-name
 except ImportError:
     pass
 
