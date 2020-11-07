@@ -1,6 +1,7 @@
 import ast
 import collections
 import enum
+from optparse import OptionConflictError
 
 try:
     # pylint:disable=unused-import
@@ -133,16 +134,28 @@ class IfChecker(object):
         self.lines = lines
         self.options = options
 
-    @staticmethod
-    def add_options(optmanager):
+    @classmethod
+    def add_options(cls, parser):
         # type: (OptionManager) -> None
-        optmanager.add_option(
-            "--max-if-conditions",
-            type="int",
-            metavar="n",
-            default=DEFAULT_MAX_IF_CONDITIONS,
-            parse_from_config=True,
-        )
+        flag = "--max-if-conditions"
+        kwargs = {
+            "default": DEFAULT_MAX_IF_CONDITIONS,
+            "metavar": "n",
+            "parse_from_config": "True",
+            "type": "int",
+        }
+
+        config_opts = getattr(parser, "config_options", None)
+        if isinstance(config_opts, list):
+            # Flake8 2.x
+            kwargs.pop("parse_from_config")
+            if flag[2:] not in parser.config_options:
+                parser.config_options.append(flag[2:])
+
+        try:
+            parser.add_option(flag, **kwargs)
+        except OptionConflictError:
+            pass
 
     def run(self):
         # type: () -> Iterator[IfCheckerReportItem]

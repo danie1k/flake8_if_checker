@@ -81,4 +81,4 @@ def test_flake8_integration(fixture_file, max_if_conditions, capsys):  # type:ig
         runpy.run_module("flake8")
 
     captured = capsys.readouterr()
-    assert captured.out.strip() == expected_result.strip()
+    assert captured.out.strip().split("\n") == expected_result.strip().split("\n")
