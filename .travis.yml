@@ -1,12 +1,22 @@
 language: python
 os: linux
 python:
-  - "2.7"
-  - "3.5"
-  - "3.6"
-  - "3.7"
-  - "3.8"
-  - "3.9"
+  - 2.7
+  - 3.5
+  - 3.6
+  - 3.7
+  - 3.8
+  - 3.9
+
+env:
+  - FLAKE="3.2.x" PACKAGE_VERSION="flake8<3.3.0"
+  - FLAKE="3.3.x" PACKAGE_VERSION="flake8<3.4.0"
+  - FLAKE="3.4.x" PACKAGE_VERSION="flake8<3.5.0"
+  - FLAKE="3.5.x" PACKAGE_VERSION="flake8==3.5.0"
+  - FLAKE="3.6.x" PACKAGE_VERSION="flake8==3.6.0"
+  - FLAKE="3.7.x" PACKAGE_VERSION="flake8<3.8.0"
+  - FLAKE="3.8.x" PACKAGE_VERSION="flake8<3.9.0"
+  - FLAKE="latest" PACKAGE_VERSION="--pre flake8"
 
 cache:
   pip: true
@@ -14,7 +24,41 @@ cache:
 install:
   - pip install -e .[tests]
 
-script: coverage run -m pytest -v
+script:
+  - pip install -q -U $PACKAGE_VERSION
+  - flake8 --version
+  - pytest -v
 
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+jobs:
+  allow_failures:
+    - python: 3.9
+      env: FLAKE="3.2.x" PACKAGE_VERSION="flake8<3.3.0"
+    - python: 3.9
+      env: FLAKE="3.3.x" PACKAGE_VERSION="flake8<3.4.0"
+    - python: 3.9
+      env: FLAKE="3.4.x" PACKAGE_VERSION="flake8<3.5.0"
+    - python: 3.9
+      env: FLAKE="3.5.x" PACKAGE_VERSION="flake8==3.5.0"
+    - python: 3.9
+      env: FLAKE="3.6.x" PACKAGE_VERSION="flake8==3.6.0"
+    - python: 3.9
+      env: FLAKE="3.7.x" PACKAGE_VERSION="flake8<3.8.0"
+    - python: 3.9
+      env: FLAKE="3.8.x" PACKAGE_VERSION="flake8<3.9.0"
+    - python: 3.9
+      env: FLAKE="latest" PACKAGE_VERSION="--pre flake8"
+
+  exclude:
+    - python: 3.8
+      env: FLAKE="3.2.x" PACKAGE_VERSION="flake8<3.3.0"
+    - python: 3.8
+      env: FLAKE="3.3.x" PACKAGE_VERSION="flake8<3.4.0"
+    - python: 3.8
+      env: FLAKE="3.4.x" PACKAGE_VERSION="flake8<3.5.0"
+    - python: 3.8
+      env: FLAKE="3.5.x" PACKAGE_VERSION="flake8==3.5.0"
+    - python: 3.8
+      env: FLAKE="3.6.x" PACKAGE_VERSION="flake8==3.6.0"
+    - python: 3.8
+      env: FLAKE="3.7.x" PACKAGE_VERSION="flake8<3.8.0"
+

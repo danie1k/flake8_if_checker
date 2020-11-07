@@ -11,25 +11,17 @@ except ImportError:
     pass
 
 
-CWD = os.path.dirname(os.path.realpath(__file__))
-
-
 @pytest.fixture
-def report():
-    _fixture_file_name = "fixture_file.py.txt"
-
-    class Options(object):
-        max_if_conditions = 0
-
-    with open(os.path.join(CWD, _fixture_file_name), "r") as fobj:
-        tree = ast.parse(fobj.read(), _fixture_file_name)
+def report_getter(fixture_file, max_if_conditions):
+    with open(fixture_file, "r") as fobj:
+        tree = ast.parse(fobj.read(), os.path.basename(fixture_file))
         fobj.seek(0)
         lines = fobj.readlines()
 
     checker = IfChecker(
         tree=tree,
         lines=lines,
-        options=Options(),
+        options=type("Options", (object,), {"max_if_conditions": max_if_conditions}),
     )
 
     return tuple(checker.run())
@@ -102,9 +94,9 @@ EXPECTED_REPORTS = [
 
 
 @pytest.mark.parametrize("index,line,col,condition_count,type,kind", EXPECTED_REPORTS)
-def test_if01_error(report, index, line, col, condition_count, type, kind):
+def test_if01_error(report_getter, index, line, col, condition_count, type, kind):
     # type: (Tuple[tuple, ...], int, int, int, int, str, str) -> None
-    report_result = report[index][:-1]
+    report_result = report_getter[index][:-1]
     expected_result = (
         line,
         col,

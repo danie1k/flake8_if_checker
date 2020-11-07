@@ -18,7 +18,7 @@
 
 ## About the Project
 
-This plugins adds 1 new flake8 warning(s).
+This plugins adds one new flake8 warning.
 
 `IF01` Too many conditions in IF/ELIF Statement/Expression.
 
@@ -38,8 +38,8 @@ be sure to enable the `IF` category as well.
 ## Known issues
 
 - Unknown if supports `# noqa`
-- Unknown if Flake8 v2
-- Does not work in Python 3.9
+- In Python 3.8 does not work with flake8 < 3.8
+- Does not work with Python 3.9
 
 
 ## License

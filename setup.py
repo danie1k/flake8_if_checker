@@ -29,11 +29,11 @@ setup(
     keywords="pep8 flake8 conditional complexity",
     py_modules=("flake8_if_checker",),
     python_requires=">=2.7",
-    install_requires=("flake8>3.0.0",),
+    install_requires=("flake8>3.2.0",),
     extras_require={
         "lint": ("flake8>=3.0.0", "isort>=4.3.0", "pylint>=1.9.0"),
         "py3lint": ("black>=18.6b2", "mypy>=0.790", "typing"),
-        "tests": ("coverage>=5.0", "pytest>=4.6.0", "pytest-sugar>=0.9"),
+        "tests": ("coverage>=5.0", "mock", "pytest>=4.6.0", "pytest-sugar"),
     },
     zip_safe=False,
     classifiers=[
