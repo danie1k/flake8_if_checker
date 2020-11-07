@@ -2,6 +2,16 @@ import ast
 import collections
 import enum
 
+try:
+    from argparse import Namespace
+    from flake8.options.manager import OptionManager
+    from typing import Dict, Iterator, List, Tuple
+
+    IfCheckerReportItem = Tuple[int, int, str, type]
+except ImportError:
+    pass
+
+
 DEFAULT_MAX_IF_CONDITIONS = 2
 
 Result = collections.namedtuple("Result", "type kind line col condition_count")
@@ -23,11 +33,13 @@ class IfType(enum.Enum):
 
 class AstVisitor(object):
     def __init__(self):
-        self._result_store = {}
+        # type: () -> None
+        self._result_store = {}  # type: Dict[Tuple[str, int, int], Result]
 
     @property
     def results(self):
-        return tuple(
+        # type: () -> Tuple[Result]
+        return tuple(  # type:ignore
             sorted(
                 self._result_store.values(),
                 key=lambda result: (result.line, result.col, result.kind),
@@ -35,13 +47,16 @@ class AstVisitor(object):
         )
 
     def lookup(self, tree):
+        # type: (ast.Module) -> None
         assert hasattr(tree, "body"), "tree must have `body` property"
         self._visit_node(tree)
 
     def _get_type(self, node):
+        # type: (ast.AST) -> str
         return type(node).__name__
 
     def _visit_node(self, node):
+        # type: (ast.AST) -> None
         self.__visit_subtree(node, "body")
         self.__visit_subtree(node, "orelse")
         self.__visit_subtree(node, "test")
@@ -53,6 +68,7 @@ class AstVisitor(object):
             self.__visit_if(node)
 
     def __count_if(self, node):
+        # type: (ast.stmt) -> int
         counter = 0
         values = getattr(node, "values", [])
 
@@ -67,6 +83,7 @@ class AstVisitor(object):
         return counter
 
     def __visit_if(self, node):
+        # type: (ast.AST) -> None
         node_type = self._get_type(node)
         if node_type not in ["If", "IfExp"]:
             return
@@ -76,11 +93,12 @@ class AstVisitor(object):
         node_kind = IfKind[node_type].value
         result_key = (node_kind, node_line, node_col)
 
-        test_values = getattr(node.test, "values", [])
+        node_test = getattr(node, "test")
+        test_values = getattr(node_test, "values", [])
         if not test_values:
             counter = 1
         else:
-            counter = self.__count_if(node.test)
+            counter = self.__count_if(node_test)
 
         self._result_store[result_key] = Result(
             type=None,
@@ -91,9 +109,11 @@ class AstVisitor(object):
         )
 
     def __visit_subtree(self, node, subtree_name):
+        # type: (ast.AST, str) -> None
         subtree = getattr(node, subtree_name, [])
         if isinstance(subtree, collections.Iterable):
-            [self._visit_node(subtree_item) for subtree_item in subtree]
+            for subtree_item in subtree:
+                self._visit_node(subtree_item)
         elif isinstance(subtree, ast.AST):
             self._visit_node(subtree)
 
@@ -105,12 +125,14 @@ class IfChecker(object):
     ELIF_LEN = len("elif ")
 
     def __init__(self, tree, lines, options):
+        # type: (ast.Module, List[str], Namespace) -> None
         self.tree = tree
         self.lines = lines
         self.options = options
 
     @staticmethod
     def add_options(optmanager):
+        # type: (OptionManager) -> None
         optmanager.add_option(
             "--max-if-conditions",
             type="int",
@@ -120,6 +142,7 @@ class IfChecker(object):
         )
 
     def run(self):
+        # type: () -> Iterator[IfCheckerReportItem]
         tree = ast.fix_missing_locations(self.tree)
 
         visitor = AstVisitor()
@@ -131,6 +154,7 @@ class IfChecker(object):
                 yield self._format_report(IfCheckerErrors.IF01, fixed_result)
 
     def _fix_result_item(self, result):
+        # type: (Result) -> Result
         # Add default IF type
         kwargs = result._asdict()
         kwargs["type"] = IfType.IF.value
@@ -152,9 +176,11 @@ class IfChecker(object):
         return result
 
     def _has_if01_error(self, result):
-        return result.condition_count > self.options.max_if_conditions
+        # type: (Result) -> bool
+        return result.condition_count > self.options.max_if_conditions  # type:ignore
 
     def _format_report(self, error, result):
+        # type: (IfCheckerErrors, Result) -> IfCheckerReportItem
         return (
             result.line,
             result.col,
