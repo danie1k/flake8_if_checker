@@ -82,13 +82,12 @@ def test_flake8_integration(fixture_file, max_if_conditions, capsys):  # type:ig
 
     _errors = []
     for (i, (result, expected)) in enumerate(
-        zip(captured.out.strip().split("\n"), expected_result.strip().split("\n")),
-        1
+        zip(captured.out.strip().split("\n"), expected_result.strip().split("\n")), 1
     ):
         try:
             assert result == expected
         except AssertionError as ex:
-            _errors.append((f"The expected result no.{i} does not match", ex))
+            _errors.append(("The expected result no.{} does not match".format(i), ex))
 
     if _errors:
-        raise AssertionError("\n\n".join(f"{item[0]}\n{item[1]}" for item in _errors))
+        raise AssertionError("\n\n".join("{0}\n{1}".format(*item) for item in _errors))
