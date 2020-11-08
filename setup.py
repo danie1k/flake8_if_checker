@@ -23,7 +23,7 @@ setup(
             ),
         )
     ),
-    description="Flake8's IF statement complexity linter",
+    description="Flake8's IF statement complexity linter plugin",
     long_description=long_description,
     long_description_content_type="text/markdown",
     keywords="pep8 flake8 conditional complexity",
@@ -51,7 +51,6 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
-        "Programming Language :: Python :: 3.9",
         "Topic :: Software Development :: Libraries :: Python Modules",
         "Topic :: Software Development :: Quality Assurance",
     ],

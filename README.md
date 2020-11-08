@@ -4,7 +4,7 @@
 
 # flake8-if-checker
 
-[Flake8](https://pypi.org/project/flake8/)'s `IF` statement complexity linter.
+[Flake8](https://pypi.org/project/flake8/)'s `IF` statement complexity linter plugin.
 
 
 ## Table of Contents
@@ -37,7 +37,6 @@ be sure to enable the `IF` category as well.
 
 ## Known issues
 
-- Unknown if supports `# noqa`
 - In Python 3.8 does not work with flake8 < 3.8
 - Does not work with Python 3.9
 

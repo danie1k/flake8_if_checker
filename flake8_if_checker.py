@@ -176,16 +176,11 @@ class IfChecker(object):
         kwargs["type"] = IfType.IF.value
         result = Result(**kwargs)
 
-        if result.col < self.ELIF_LEN:
-            return result
-
         # Fix ELIF detection, impossible in AST
         code_line = self.lines[result.line - 1]
-        substr_from, substr_to = result.col - self.ELIF_LEN, result.col
 
-        if code_line[substr_from:substr_to].startswith("elif"):
+        if code_line.strip().startswith("elif"):
             kwargs = result._asdict()
-            kwargs["col"] = substr_from
             kwargs["type"] = IfType.ELIF.value
             return Result(**kwargs)
 

@@ -12,8 +12,6 @@ except ImportError:
 
 import pytest
 
-CWD = os.path.dirname(os.path.realpath(__file__))
-
 
 def test_flake8_integration(fixture_file, max_if_conditions, capsys):  # type:ignore
     # type: (str, int, CaptureFixture) -> None
@@ -81,4 +79,16 @@ def test_flake8_integration(fixture_file, max_if_conditions, capsys):  # type:ig
         runpy.run_module("flake8")
 
     captured = capsys.readouterr()
-    assert captured.out.strip().split("\n") == expected_result.strip().split("\n")
+
+    _errors = []
+    for (i, (result, expected)) in enumerate(
+        zip(captured.out.strip().split("\n"), expected_result.strip().split("\n")),
+        1
+    ):
+        try:
+            assert result == expected
+        except AssertionError as ex:
+            _errors.append((f"The expected result no.{i} does not match", ex))
+
+    if _errors:
+        raise AssertionError("\n\n".join(f"{item[0]}\n{item[1]}" for item in _errors))

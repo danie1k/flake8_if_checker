@@ -188,3 +188,5 @@ def really_creepy__nested_if_statement__3(left, right):
         pass
 
 
+if a == True or b == False:  # noqa
+    return True
