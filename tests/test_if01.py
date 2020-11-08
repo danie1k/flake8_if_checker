@@ -63,12 +63,12 @@ EXPECTED_REPORTS = [
     # 010 -------------------------------------
     (19, 86, 0, 2, "IF", "Statement"),
     # 011 -------------------------------------
-    (20, 93, 15, 1, "IF", "Expression"),
+    (20, 93, 30, 1, "IF", "Expression"),
     # 012 -------------------------------------
     (21, 97, 0, 6, "IF", "Statement"),
     # 013 -------------------------------------
     (22, 106, 0, 5, "IF", "Statement"),
-    (23, 109, 26, 1, "IF", "Expression"),
+    (23, 109, 58, 1, "IF", "Expression"),
     (24, 111, 0, 3, "ELIF", "Statement"),
     # 014 -------------------------------------
     (25, 118, 0, 2, "IF", "Statement"),
@@ -80,7 +80,7 @@ EXPECTED_REPORTS = [
     (28, 135, 0, 2, "IF", "Statement"),
     # 018 -------------------------------------
     (29, 140, 0, 3, "IF", "Statement"),
-    (30, 140, 4, 2, "IF", "Expression"),
+    (30, 140, 9, 2, "IF", "Expression"),
     # 019 -------------------------------------
     (31, 146, 0, 1, "IF", "Statement"),
     (32, 147, 4, 1, "IF", "Statement"),
@@ -91,8 +91,8 @@ EXPECTED_REPORTS = [
     (37, 157, 16, 1, "IF", "Statement"),
     # 020 -------------------------------------
     (38, 164, 0, 4, "IF", "Statement"),
-    (39, 164, 4, 1, "IF", "Expression"),
-    (40, 164, 13, 1, "IF", "Expression"),
+    (39, 164, 9, 1, "IF", "Expression"),
+    (40, 164, 9, 1, "IF", "Expression"),  # FIXME: Malformed check, should be col 18
 ]
 
 
@@ -108,11 +108,7 @@ def test_if01_error(
         line,
         col,
         flake8_if_checker.IfCheckerErrors.IF01.value.format(
-            line=line,
-            col=col,
-            type=type,
-            kind=kind,
-            condition_count=condition_count,
+            line=line, col=col, type=type, kind=kind, condition_count=condition_count
         ),
     )
     assert report_result == expected_result

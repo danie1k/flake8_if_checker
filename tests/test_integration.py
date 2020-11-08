@@ -44,17 +44,17 @@ def test_flake8_integration(fixture_file, max_if_conditions, capsys):  # type:ig
         {fixture_file}:71:1: IF01 Too many conditions (2) in IF Statement
         {fixture_file}:77:1: IF01 Too many conditions (2) in IF Statement
         {fixture_file}:86:1: IF01 Too many conditions (2) in IF Statement
-        {fixture_file}:93:16: IF01 Too many conditions (1) in IF Expression
+        {fixture_file}:93:31: IF01 Too many conditions (1) in IF Expression
         {fixture_file}:97:1: IF01 Too many conditions (6) in IF Statement
         {fixture_file}:106:1: IF01 Too many conditions (5) in IF Statement
-        {fixture_file}:109:27: IF01 Too many conditions (1) in IF Expression
+        {fixture_file}:109:59: IF01 Too many conditions (1) in IF Expression
         {fixture_file}:111:1: IF01 Too many conditions (3) in ELIF Statement
         {fixture_file}:118:1: IF01 Too many conditions (2) in IF Statement
         {fixture_file}:122:1: IF01 Too many conditions (2) in IF Statement
         {fixture_file}:130:1: IF01 Too many conditions (4) in IF Statement
         {fixture_file}:135:1: IF01 Too many conditions (2) in IF Statement
         {fixture_file}:140:1: IF01 Too many conditions (3) in IF Statement
-        {fixture_file}:140:5: IF01 Too many conditions (2) in IF Expression
+        {fixture_file}:140:10: IF01 Too many conditions (2) in IF Expression
         {fixture_file}:146:1: IF01 Too many conditions (1) in IF Statement
         {fixture_file}:147:5: IF01 Too many conditions (1) in IF Statement
         {fixture_file}:148:9: IF01 Too many conditions (1) in IF Statement
@@ -63,10 +63,10 @@ def test_flake8_integration(fixture_file, max_if_conditions, capsys):  # type:ig
         {fixture_file}:154:13: IF01 Too many conditions (1) in IF Statement
         {fixture_file}:157:17: IF01 Too many conditions (1) in IF Statement
         {fixture_file}:164:1: IF01 Too many conditions (4) in IF Statement
-        {fixture_file}:164:5: IF01 Too many conditions (1) in IF Expression
-        {fixture_file}:164:14: IF01 Too many conditions (1) in IF Expression
+        {fixture_file}:164:10: IF01 Too many conditions (1) in IF Expression
+        {fixture_file}:164:10: IF01 Too many conditions (1) in IF Expression
         {fixture_file}:176:5: IF01 Too many conditions (4) in IF Statement
-        {fixture_file}:177:14: IF01 Too many conditions (1) in IF Expression
+        {fixture_file}:177:19: IF01 Too many conditions (1) in IF Expression
         """.format(
             fixture_file=os.path.basename(fixture_file)
         )

@@ -7,7 +7,7 @@ try:
     # pylint:disable=unused-import
     from argparse import Namespace
     from flake8.options.manager import OptionManager
-    from typing import Dict, Iterator, List, Tuple
+    from typing import Dict, Iterator, List, Optional, Tuple
 
     # pylint:enable=unused-import
 
@@ -126,6 +126,7 @@ class IfChecker(object):
     name = "flake8_if_checker"
     version = "0.3.0"
 
+    IF_LEN = len("if ")
     ELIF_LEN = len("elif ")
 
     def __init__(self, tree, lines, options):
@@ -167,28 +168,61 @@ class IfChecker(object):
         for result in visitor.results:
             fixed_result = self._fix_result_item(result)
             if self._has_if01_error(fixed_result):
-                yield self._format_report(IfCheckerErrors.IF01, fixed_result)
+                yield self._format_report(
+                    IfCheckerErrors.IF01, fixed_result  # type:ignore
+                )
 
     def _fix_result_item(self, result):
-        # type: (Result) -> Result
+        # type: (Result) -> Optional[Result]
         # Add default IF type
         kwargs = result._asdict()
-        kwargs["type"] = IfType.IF.value
-        result = Result(**kwargs)
 
-        # Fix ELIF detection, impossible in AST
-        code_line = self.lines[result.line - 1]
+        try:
+            _type, _col = self._find_type_and_column(  # type:ignore
+                self.lines[kwargs["line"] - 1], kwargs["col"]
+            )
+        except TypeError:
+            return None
 
-        if code_line.strip().startswith("elif"):
-            kwargs = result._asdict()
-            kwargs["type"] = IfType.ELIF.value
-            return Result(**kwargs)
+        kwargs["type"] = _type.value
+        kwargs["col"] = _col
+        return Result(**kwargs)
 
-        return result
+    def _find_type_and_column(self, code_line, column):  # noqa:C901
+        # type: (str, int) -> Optional[Tuple[IfType, int]]
+
+        def _find_result(value):
+            # type: (str) -> Optional[Tuple[IfType, int]]
+            if value.strip().startswith("elif"):
+                return IfType.ELIF, value.index("elif")
+            if value.strip().startswith("if"):
+                return IfType.IF, value.index("if")
+            if "if " in value and " else " in value:
+                return IfType.IF, value.index("if")
+            return None
+
+        if column == 0:
+            _maybe_result = _find_result(code_line)
+            if _maybe_result:
+                return _maybe_result
+
+        for substr_from in (column - self.ELIF_LEN, column - self.IF_LEN):
+            if substr_from < 0:
+                continue
+
+            _maybe_result = _find_result(code_line[substr_from:])
+            if _maybe_result:
+                _type, _col = _maybe_result
+                return _type, _col + substr_from
+
+        return None
 
     def _has_if01_error(self, result):
-        # type: (Result) -> bool
-        return result.condition_count > self.options.max_if_conditions  # type:ignore
+        # type: (Optional[Result]) -> bool
+        return (
+            result
+            and result.condition_count > self.options.max_if_conditions  # type:ignore
+        )
 
     def _format_report(self, error, result):
         # type: (IfCheckerErrors, Result) -> IfCheckerReportItem
