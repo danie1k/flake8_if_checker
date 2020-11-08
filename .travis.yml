@@ -27,7 +27,14 @@ install:
 script:
   - pip install -q -U $PACKAGE_VERSION
   - flake8 --version
-  - pytest -v
+  - >
+    test $TRAVIS_PYTHON_VERSION = "2.7" && test $FLAKE = "latest" && coverage run -m pytest
+    || pytest -v
+
+after_success:
+  - >
+    test $TRAVIS_PYTHON_VERSION = "2.7" && test $FLAKE = "latest"
+    && bash <(curl -s https://codecov.io/bash)
 
 after_success:
   -  test $TRAVIS_PYTHON_VERSION = "2.7" && test $FLAKE = "latest" && bash <(curl -s https://codecov.io/bash)
