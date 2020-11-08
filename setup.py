@@ -28,7 +28,7 @@ setup(
     long_description_content_type="text/markdown",
     keywords="pep8 flake8 conditional complexity",
     py_modules=("flake8_if_checker",),
-    python_requires=">=2.7",
+    python_requires=">=2.7, <3.9",
     install_requires=("flake8>3.2.0",),
     extras_require={
         "lint": ("flake8>=3.0.0", "isort>=4.3.0", "pylint>=1.9.0"),
