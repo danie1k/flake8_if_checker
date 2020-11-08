@@ -1,6 +1,9 @@
 [![Build Status](https://travis-ci.org/danie1k/python-flake8-if-checker.svg?branch=master)](https://travis-ci.org/danie1k/python-flake8-if-checker)
 [![Code Coverage](https://codecov.io/gh/danie1k/python-flake8-if-checker/branch/master/graph/badge.svg?token=A496BD37Qj)](https://codecov.io/gh/danie1k/python-flake8-if-checker)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/flake8-if-checker)](https://pypi.org/project/flake8-if-checker/)
+[![PyPI](https://img.shields.io/pypi/v/flake8-if-checker)](https://pypi.org/project/flake8-if-checker/)
 [![MIT License](https://img.shields.io/github/license/danie1k/python-flake8-if-checker)](https://github.com/danie1k/python-flake8-if-checker/blob/master/LICENSE)
+[![Automatic PyPI Release](https://github.com/danie1k/python-flake8-if-checker/workflows/PyPi%20Release/badge.svg)](https://github.com/danie1k/python-flake8-if-checker/actions)
 
 # flake8-if-checker
 
