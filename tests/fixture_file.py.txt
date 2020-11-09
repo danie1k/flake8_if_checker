@@ -190,3 +190,7 @@ def really_creepy__nested_if_statement__3(left, right):
 
 if a == True or b == False:  # noqa
     return True
+
+
+def foo_bar(lorem, ipsum):
+    pass

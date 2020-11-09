@@ -7,7 +7,7 @@ from _pytest.capture import CaptureFixture  # pylint:disable=unused-import
 
 try:
     from unittest import mock
-except ImportError:
+except ImportError:  # pragma: no cover
     import mock  # type:ignore
 
 import pytest
@@ -86,8 +86,8 @@ def test_flake8_integration(fixture_file, max_if_conditions, capsys):  # type:ig
     ):
         try:
             assert result == expected
-        except AssertionError as ex:
+        except AssertionError as ex:  # pragma: no cover
             _errors.append(("The expected result no.{} does not match".format(i), ex))
 
-    if _errors:
+    if _errors:  # pragma: no cover
         raise AssertionError("\n\n".join("{0}\n{1}".format(*item) for item in _errors))

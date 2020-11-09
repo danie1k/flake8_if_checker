@@ -7,7 +7,7 @@ import flake8_if_checker
 
 try:
     from typing import Tuple
-except ImportError:
+except ImportError:  # pragma: no cover
     pass
 
 

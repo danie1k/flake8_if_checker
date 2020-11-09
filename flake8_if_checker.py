@@ -7,12 +7,12 @@ try:
     # pylint:disable=unused-import
     from argparse import Namespace
     from flake8.options.manager import OptionManager
-    from typing import Dict, Iterator, List, Optional, Tuple
+    from typing import Dict, Iterator, List, Optional, Tuple, Union
 
     # pylint:enable=unused-import
 
     IfCheckerReportItem = Tuple[int, int, str, type]  # pylint:disable=invalid-name
-except ImportError:
+except ImportError:  # pragma: no cover
     pass
 
 
@@ -68,7 +68,7 @@ class AstVisitor(object):
         self.__visit_subtree(node, "values")
 
         # Visiting: If statements & expression
-        if self._get_type(node) in ["If", "IfExp"]:
+        if isinstance(node, (ast.If, ast.IfExp)):
             self.__visit_if(node)
 
     def __count_if(self, node):
@@ -87,11 +87,8 @@ class AstVisitor(object):
         return counter
 
     def __visit_if(self, node):
-        # type: (ast.AST) -> None
+        # type: (Union[ast.If, ast.IfExp]) -> None
         node_type = self._get_type(node)
-        if node_type not in ["If", "IfExp"]:
-            return
-
         node_line = node.lineno
         node_col = node.col_offset
         node_kind = IfKind[node_type].value
@@ -136,7 +133,7 @@ class IfChecker(object):
         self.options = options
 
     @classmethod
-    def add_options(cls, parser):
+    def add_options(cls, parser):  # pragma: no cover
         # type: (OptionManager) -> None
         flag = "--max-if-conditions"
         kwargs = {
@@ -181,7 +178,7 @@ class IfChecker(object):
             _type, _col = self._find_type_and_column(  # type:ignore
                 self.lines[kwargs["line"] - 1], kwargs["col"]
             )
-        except TypeError:
+        except TypeError:  # pragma: no cover
             return None
 
         kwargs["type"] = _type.value
@@ -199,7 +196,7 @@ class IfChecker(object):
                 return IfType.IF, value.index("if")
             if "if " in value and " else " in value:
                 return IfType.IF, value.index("if")
-            return None
+            return None  # pragma: no cover
 
         if column == 0:
             _maybe_result = _find_result(code_line)
@@ -215,7 +212,7 @@ class IfChecker(object):
                 _type, _col = _maybe_result
                 return _type, _col + substr_from
 
-        return None
+        return None  # pragma: no cover
 
     def _has_if01_error(self, result):
         # type: (Optional[Result]) -> bool
